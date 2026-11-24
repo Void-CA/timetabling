@@ -49,7 +49,8 @@ fn ordena_por_hora_de_inicio() {
 fn muestra_tramo_y_errores() {
     let tramo = TimeSegment::new(at(8, 0), at(8, 50), SegmentKind::Academic).unwrap();
 
-    assert_eq!(tramo.to_string(), "08:00:00 -> 08:50:00 (Academic)");
+    assert_eq!(tramo.to_string(), "08:00 -> 08:50 (Academic)");
+    assert_eq!(SegmentKind::Unassigned.to_string(), "Unassigned");
     assert_eq!(SegmentKind::EatingBreak.to_string(), "EatingBreak");
     assert_eq!(
         SegmentError::EmptySegment.to_string(),

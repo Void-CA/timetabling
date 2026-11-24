@@ -62,7 +62,7 @@ fn cubre_la_jornada_sin_tramos_vacios() {
     assert!(
         day.segments()
             .iter()
-            .all(|segment| segment.kind() != SegmentKind::Other)
+            .all(|segment| segment.kind() != SegmentKind::Unassigned)
     );
 }
 
@@ -90,7 +90,7 @@ fn encadena_cada_grupo_con_su_pausa() {
 }
 
 #[test]
-fn deja_el_remanente_como_other() {
+fn deja_el_remanente_como_unassigned() {
     let template = ScheduleTemplate::new(
         at(8, 0),
         at(17, 0),
@@ -107,7 +107,7 @@ fn deja_el_remanente_como_other() {
     let day = template.build();
     let last = day.segments().last().unwrap();
 
-    assert_eq!(last.kind(), SegmentKind::Other);
+    assert_eq!(last.kind(), SegmentKind::Unassigned);
     assert_eq!(last.start_time(), at(16, 40));
     assert_eq!(last.end_time(), at(17, 0));
 }
@@ -127,7 +127,7 @@ fn se_detiene_cuando_se_agotan_las_pausas() {
     let last = day.segments().last().unwrap();
 
     assert_eq!(day.segments().len(), 4);
-    assert_eq!(last.kind(), SegmentKind::Other);
+    assert_eq!(last.kind(), SegmentKind::Unassigned);
     assert_eq!(last.duration(), DTimeSpan::from_minutes(40));
 }
 

@@ -8,7 +8,7 @@ impl fmt::Display for SegmentKind {
             SegmentKind::Academic => "Academic",
             SegmentKind::Break => "Break",
             SegmentKind::EatingBreak => "EatingBreak",
-            SegmentKind::Other => "Other",
+            SegmentKind::Unassigned => "Unassigned",
         };
 
         f.write_str(name)

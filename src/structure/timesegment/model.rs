@@ -5,7 +5,7 @@ pub enum SegmentKind {
     Academic,
     Break,
     EatingBreak,
-    Other,
+    Unassigned,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]

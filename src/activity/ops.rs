@@ -2,7 +2,7 @@ use std::fmt;
 
 use crate::time::DTimeSpan;
 
-use super::model::{Activity, ActivityError, ActivityType};
+use super::model::{Activity, ActivityError, ActivityType, InterruptionPolicy};
 
 impl fmt::Display for ActivityType {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
@@ -34,6 +34,32 @@ impl fmt::Display for ActivityError {
         match self {
             ActivityError::EmptyDuration => {
                 f.write_str("la duración de una actividad no puede ser cero")
+            }
+        }
+    }
+}
+
+impl fmt::Display for InterruptionPolicy {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            InterruptionPolicy::None => f.write_str("None"),
+            InterruptionPolicy::Breaks {
+                max,
+                breaks,
+                eating_breaks,
+                min_chunk,
+            } => {
+                if *max == u32::MAX {
+                    write!(
+                        f,
+                        "Breaks max=unbounded breaks={breaks} eating_breaks={eating_breaks} min_chunk={min_chunk}"
+                    )
+                } else {
+                    write!(
+                        f,
+                        "Breaks max={max} breaks={breaks} eating_breaks={eating_breaks} min_chunk={min_chunk}"
+                    )
+                }
             }
         }
     }

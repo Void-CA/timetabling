@@ -1,6 +1,5 @@
+use super::{Activity, ActivityError, ActivityType, InterruptionPolicy};
 use crate::time::DTimeSpan;
-
-use super::{Activity, ActivityError, ActivityType};
 
 #[test]
 fn rechaza_duracion_cero() {
@@ -83,5 +82,64 @@ fn ordena_tipos_de_actividad() {
             ActivityType::Meeting,
             ActivityType::Lab
         ]
+    );
+}
+
+#[test]
+fn por_defecto_es_contigua() {
+    let clase = Activity::new(ActivityType::Class, DTimeSpan::from_minutes(150)).unwrap();
+
+    assert_eq!(clase.interruption_policy(), InterruptionPolicy::None);
+    assert!(!clase.is_interruptible());
+}
+
+#[test]
+fn interruptible_construye_una_politica_permisiva() {
+    let practica = Activity::new(ActivityType::Lab, DTimeSpan::from_minutes(100))
+        .unwrap()
+        .interruptible(true);
+
+    assert_eq!(
+        practica.interruption_policy(),
+        InterruptionPolicy::Breaks {
+            max: u32::MAX,
+            breaks: true,
+            eating_breaks: true,
+            min_chunk: DTimeSpan::zero(),
+        }
+    );
+    assert!(practica.is_interruptible());
+}
+
+#[test]
+fn una_politica_explicita_sustituye_al_booleano() {
+    let politica = InterruptionPolicy::Breaks {
+        max: 1,
+        breaks: true,
+        eating_breaks: false,
+        min_chunk: DTimeSpan::from_minutes(50),
+    };
+
+    let clase = Activity::new(ActivityType::Class, DTimeSpan::from_minutes(150))
+        .unwrap()
+        .interruptible(true)
+        .policy(politica);
+
+    assert_eq!(clase.interruption_policy(), politica);
+    assert!(clase.is_interruptible());
+}
+
+#[test]
+fn describe_politicas() {
+    assert_eq!(InterruptionPolicy::None.to_string(), "None");
+    assert_eq!(
+        InterruptionPolicy::Breaks {
+            max: 1,
+            breaks: true,
+            eating_breaks: false,
+            min_chunk: DTimeSpan::from_minutes(50),
+        }
+        .to_string(),
+        "Breaks max=1 breaks=true eating_breaks=false min_chunk=00:50:00"
     );
 }

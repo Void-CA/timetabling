@@ -141,7 +141,7 @@ impl ScheduleTemplate {
         }
 
         if cursor != self.end {
-            segments.push(segment(cursor, self.end, SegmentKind::Other));
+            segments.push(segment(cursor, self.end, SegmentKind::Unassigned));
         }
 
         DayStructure::new(segments).expect("la plantilla genera una estructura válida")

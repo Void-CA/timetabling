@@ -8,11 +8,22 @@ pub enum ActivityType {
     Lab,
 }
 
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum InterruptionPolicy {
+    None,
+    Breaks {
+        max: u32,
+        breaks: bool,
+        eating_breaks: bool,
+        min_chunk: DTimeSpan,
+    },
+}
+
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Activity {
     kind: ActivityType,
     duration: DTimeSpan,
-    interruptible: bool,
+    policy: InterruptionPolicy,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -29,12 +40,27 @@ impl Activity {
         Ok(Self {
             kind,
             duration,
-            interruptible: false,
+            policy: InterruptionPolicy::None,
         })
     }
 
     pub fn interruptible(mut self, interruptible: bool) -> Self {
-        self.interruptible = interruptible;
+        self.policy = if interruptible {
+            InterruptionPolicy::Breaks {
+                max: u32::MAX,
+                breaks: true,
+                eating_breaks: true,
+                min_chunk: DTimeSpan::zero(),
+            }
+        } else {
+            InterruptionPolicy::None
+        };
+
+        self
+    }
+
+    pub fn policy(mut self, policy: InterruptionPolicy) -> Self {
+        self.policy = policy;
         self
     }
 
@@ -46,7 +72,11 @@ impl Activity {
         self.duration
     }
 
+    pub fn interruption_policy(&self) -> InterruptionPolicy {
+        self.policy
+    }
+
     pub fn is_interruptible(&self) -> bool {
-        self.interruptible
+        self.policy != InterruptionPolicy::None
     }
 }

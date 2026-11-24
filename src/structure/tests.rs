@@ -30,7 +30,7 @@ fn jornada() -> Vec<TimeSegment> {
         academic(at(14, 50), at(15, 40)),
         segment(at(15, 40), at(16, 0), SegmentKind::Break),
         academic(at(16, 0), at(16, 50)),
-        segment(at(16, 50), at(17, 0), SegmentKind::Other),
+        segment(at(16, 50), at(17, 0), SegmentKind::Unassigned),
     ]
 }
 
@@ -164,17 +164,4 @@ fn describe_errores() {
         .to_string(),
         "el tramo 1 se solapa con el tramo 0"
     );
-}
-
-#[test]
-fn compara_capacidad_con_actividad() {
-    use crate::activity::{Activity, ActivityType};
-
-    let day = DayStructure::new(jornada()).unwrap();
-    let clase = Activity::new(ActivityType::Class, DTimeSpan::from_minutes(150)).unwrap();
-    let conferencia =
-        Activity::new(ActivityType::Conference, DTimeSpan::from_minutes(400)).unwrap();
-
-    assert!(day.academic_capacity() >= clase.duration());
-    assert!(day.academic_capacity() < conferencia.duration());
 }

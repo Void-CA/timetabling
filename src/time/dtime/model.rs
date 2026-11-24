@@ -66,10 +66,6 @@ impl DTime {
 
 impl fmt::Display for DTime {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(
-            f,
-            "{:02}:{:02}",
-            self.hour, self.minutes
-        )
+        write!(f, "{:02}:{:02}", self.hour, self.minutes)
     }
 }

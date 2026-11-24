@@ -1,8 +1,9 @@
 pub mod activity;
+pub mod analysis;
 pub mod structure;
 pub mod time;
 
-use activity::{Activity, ActivityType};
+use activity::{Activity, ActivityType, InterruptionPolicy};
 use structure::{Pause, PauseKind, ScheduleTemplate};
 use time::{DTime, DTimeSpan};
 
@@ -29,8 +30,24 @@ fn ulsa() -> ScheduleTemplate {
     .expect("plantilla válida")
 }
 
+fn report(activity: &Activity, profile: &analysis::DayProfile) {
+    println!();
+    println!("Actividad: {activity}");
+    println!("  Política:  {}", activity.interruption_policy());
+    println!("  ¿Aloja?    {}", profile.can_host(activity));
+
+    let placements = profile.placements(activity);
+
+    println!("  Placements: {}", placements.len());
+
+    for placement in &placements {
+        println!("    {placement}");
+    }
+}
+
 fn main() {
     let day = ulsa().build();
+    let profile = day.profile();
 
     for segment in &day {
         println!("{segment}");
@@ -42,32 +59,46 @@ fn main() {
     println!("Capacidad académica: {}", day.academic_capacity());
     println!("Tramos académicos: {}", day.academic_segments().count());
 
+    println!();
+    println!("Runs contiguos:");
+
+    for run in profile.runs() {
+        println!("  {run}");
+    }
+
+    println!(
+        "Continuidad máxima: {}",
+        profile
+            .longest_run()
+            .map(|run| run.duration().to_string())
+            .unwrap_or_else(|| "ninguna".to_string())
+    );
+    println!(
+        "Continuidad media:  {}",
+        profile
+            .mean_run()
+            .map(|span| span.to_string())
+            .unwrap_or_else(|| "ninguna".to_string())
+    );
+
     let clase =
         Activity::new(ActivityType::Class, DTimeSpan::from_minutes(150)).expect("actividad válida");
-    let practica = Activity::new(ActivityType::Lab, DTimeSpan::from_minutes(100))
-        .expect("actividad válida")
-        .interruptible(true);
     let conferencia = Activity::new(ActivityType::Conference, DTimeSpan::from_minutes(100))
         .expect("actividad válida");
+    let flexible = Activity::new(ActivityType::Class, DTimeSpan::from_minutes(150))
+        .expect("actividad válida")
+        .policy(InterruptionPolicy::Breaks {
+            max: 1,
+            breaks: true,
+            eating_breaks: false,
+            min_chunk: DTimeSpan::zero(),
+        });
+    let jornada_completa = Activity::new(ActivityType::Meeting, DTimeSpan::from_minutes(400))
+        .expect("actividad válida")
+        .interruptible(true);
 
-    println!();
-    println!("Actividad: {clase}");
-    println!("Actividad: {practica}");
-    println!("Actividad: {conferencia}");
-
-    let capacity = day.academic_capacity();
-
-    println!();
-    println!(
-        "Capacidad {} alcanza para {}: {}",
-        capacity,
-        clase.duration(),
-        capacity >= clase.duration()
-    );
-    println!(
-        "Capacidad {} alcanza para {}: {}",
-        capacity,
-        conferencia.duration(),
-        capacity >= conferencia.duration()
-    );
+    report(&clase, &profile);
+    report(&conferencia, &profile);
+    report(&flexible, &profile);
+    report(&jornada_completa, &profile);
 }

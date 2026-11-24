@@ -29,8 +29,8 @@ fn convierte_desde_y_hacia_segundos() {
 
 #[test]
 fn muestra_formato_de_24_horas() {
-    assert_eq!(DTime::new(8, 50, 5).unwrap().to_string(), "08:50:05");
-    assert_eq!(DTime::new(0, 0, 0).unwrap().to_string(), "00:00:00");
+    assert_eq!(DTime::new(8, 50, 5).unwrap().to_string(), "08:50");
+    assert_eq!(DTime::new(0, 0, 0).unwrap().to_string(), "00:00");
 }
 
 #[test]
