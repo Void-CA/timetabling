@@ -1,9 +1,11 @@
 pub mod activity;
-pub mod analysis;
+pub mod placement;
 pub mod structure;
 pub mod time;
 
 use activity::{Activity, ActivityType, InterruptionPolicy};
+use placement::{Placement, StartPolicy};
+use structure::profile::DayProfile;
 use structure::{Pause, PauseKind, ScheduleTemplate};
 use time::{DTime, DTimeSpan};
 
@@ -30,14 +32,15 @@ fn ulsa() -> ScheduleTemplate {
     .expect("plantilla válida")
 }
 
-fn report(activity: &Activity, profile: &analysis::DayProfile) {
+fn report(activity: &Activity, profile: &DayProfile) {
     println!();
     println!("Actividad: {activity}");
     println!("  Política:  {}", activity.interruption_policy());
-    println!("  ¿Aloja?    {}", profile.can_host(activity));
 
-    let placements = profile.placements(activity);
+    let starts = StartPolicy::PeriodBoundaries;
+    let placements = Placement::find(profile, activity, starts);
 
+    println!("  ¿Aloja?    {}", !placements.is_empty());
     println!("  Placements: {}", placements.len());
 
     for placement in &placements {
@@ -88,7 +91,7 @@ fn main() {
     let flexible = Activity::new(ActivityType::Class, DTimeSpan::from_minutes(150))
         .expect("actividad válida")
         .policy(InterruptionPolicy::Breaks {
-            max: 1,
+            max_interruptions: 1,
             breaks: true,
             eating_breaks: false,
             min_chunk: DTimeSpan::zero(),

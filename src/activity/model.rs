@@ -12,7 +12,7 @@ pub enum ActivityType {
 pub enum InterruptionPolicy {
     None,
     Breaks {
-        max: u32,
+        max_interruptions: u32,
         breaks: bool,
         eating_breaks: bool,
         min_chunk: DTimeSpan,
@@ -47,7 +47,7 @@ impl Activity {
     pub fn interruptible(mut self, interruptible: bool) -> Self {
         self.policy = if interruptible {
             InterruptionPolicy::Breaks {
-                max: u32::MAX,
+                max_interruptions: u32::MAX,
                 breaks: true,
                 eating_breaks: true,
                 min_chunk: DTimeSpan::zero(),

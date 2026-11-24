@@ -102,7 +102,7 @@ fn interruptible_construye_una_politica_permisiva() {
     assert_eq!(
         practica.interruption_policy(),
         InterruptionPolicy::Breaks {
-            max: u32::MAX,
+            max_interruptions: u32::MAX,
             breaks: true,
             eating_breaks: true,
             min_chunk: DTimeSpan::zero(),
@@ -114,7 +114,7 @@ fn interruptible_construye_una_politica_permisiva() {
 #[test]
 fn una_politica_explicita_sustituye_al_booleano() {
     let politica = InterruptionPolicy::Breaks {
-        max: 1,
+        max_interruptions: 1,
         breaks: true,
         eating_breaks: false,
         min_chunk: DTimeSpan::from_minutes(50),
@@ -134,12 +134,12 @@ fn describe_politicas() {
     assert_eq!(InterruptionPolicy::None.to_string(), "None");
     assert_eq!(
         InterruptionPolicy::Breaks {
-            max: 1,
+            max_interruptions: 1,
             breaks: true,
             eating_breaks: false,
             min_chunk: DTimeSpan::from_minutes(50),
         }
         .to_string(),
-        "Breaks max=1 breaks=true eating_breaks=false min_chunk=00:50:00"
+        "Breaks max_interruptions=1 breaks=true eating_breaks=false min_chunk=00:50:00"
     );
 }

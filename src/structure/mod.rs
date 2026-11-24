@@ -3,6 +3,8 @@ mod ops;
 mod template;
 mod timesegment;
 
+pub mod profile;
+
 #[cfg(test)]
 mod tests;
 

@@ -44,22 +44,21 @@ impl fmt::Display for InterruptionPolicy {
         match self {
             InterruptionPolicy::None => f.write_str("None"),
             InterruptionPolicy::Breaks {
-                max,
+                max_interruptions,
                 breaks,
                 eating_breaks,
                 min_chunk,
             } => {
-                if *max == u32::MAX {
-                    write!(
-                        f,
-                        "Breaks max=unbounded breaks={breaks} eating_breaks={eating_breaks} min_chunk={min_chunk}"
-                    )
+                let max = if *max_interruptions == u32::MAX {
+                    "unbounded".to_string()
                 } else {
-                    write!(
-                        f,
-                        "Breaks max={max} breaks={breaks} eating_breaks={eating_breaks} min_chunk={min_chunk}"
-                    )
-                }
+                    max_interruptions.to_string()
+                };
+
+                write!(
+                    f,
+                    "Breaks max_interruptions={max} breaks={breaks} eating_breaks={eating_breaks} min_chunk={min_chunk}"
+                )
             }
         }
     }
