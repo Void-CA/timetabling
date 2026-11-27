@@ -2,35 +2,15 @@ pub mod activity;
 pub mod placement;
 pub mod structure;
 pub mod time;
+pub mod helpers;
 
 use activity::{Activity, ActivityType, InterruptionPolicy};
 use placement::{Placement, StartPolicy};
 use structure::profile::DayProfile;
-use structure::{Pause, PauseKind, ScheduleTemplate};
-use time::{DTime, DTimeSpan};
 
-fn at(hour: u8, minutes: u8) -> DTime {
-    DTime::new(hour, minutes, 0).expect("hora válida")
-}
+use crate::{helpers::ulsa, time::DTimeSpan};
 
-fn pause(kind: PauseKind, minutes: u32) -> Pause {
-    Pause::new(kind, DTimeSpan::from_minutes(minutes)).expect("pausa válida")
-}
 
-fn ulsa() -> ScheduleTemplate {
-    ScheduleTemplate::new(
-        at(8, 0),
-        at(16, 40),
-        DTimeSpan::from_minutes(50),
-        2,
-        vec![
-            pause(PauseKind::Break, 20),
-            pause(PauseKind::EatingBreak, 80),
-            pause(PauseKind::Break, 20),
-        ],
-    )
-    .expect("plantilla válida")
-}
 
 fn report(activity: &Activity, profile: &DayProfile) {
     println!();

@@ -2,7 +2,9 @@ use std::fmt;
 
 use crate::time::DTimeSpan;
 
-use super::model::{Activity, ActivityError, ActivityType, InterruptionPolicy};
+use super::error::ActivityError;
+use super::model::{Activity, ActivityType};
+use super::policy::InterruptionPolicy;
 
 impl fmt::Display for ActivityType {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {

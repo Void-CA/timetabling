@@ -1,5 +1,8 @@
 use crate::time::DTimeSpan;
 
+use super::error::ActivityError;
+use super::policy::InterruptionPolicy;
+
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
 pub enum ActivityType {
     Class,
@@ -8,27 +11,11 @@ pub enum ActivityType {
     Lab,
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub enum InterruptionPolicy {
-    None,
-    Breaks {
-        max_interruptions: u32,
-        breaks: bool,
-        eating_breaks: bool,
-        min_chunk: DTimeSpan,
-    },
-}
-
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Activity {
     kind: ActivityType,
     duration: DTimeSpan,
     policy: InterruptionPolicy,
-}
-
-#[derive(Debug, Clone, PartialEq, Eq)]
-pub enum ActivityError {
-    EmptyDuration,
 }
 
 impl Activity {
