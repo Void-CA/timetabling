@@ -1,7 +1,8 @@
 use std::ops::Range;
 
 use crate::activity::{Activity, InterruptionPolicy};
-use crate::structure::profile::{DayProfile, Interruption, InterruptionSpanKind};
+use crate::structure::interruption::{Interruption, InterruptionSpanKind};
+use crate::structure::profile::DayProfile;
 use crate::time::{DTime, DTimeSpan};
 
 #[derive(Debug, Clone, PartialEq, Eq)]

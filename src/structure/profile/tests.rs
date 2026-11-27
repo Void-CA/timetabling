@@ -1,9 +1,10 @@
+use crate::structure::interruption::InterruptionSpanKind;
 use crate::structure::{
     DayStructure, Pause, PauseKind, ScheduleTemplate, SegmentKind, TimeSegment,
 };
 use crate::time::{DTime, DTimeSpan};
 
-use super::{DayProfile, InterruptionSpanKind};
+use super::DayProfile;
 
 fn at(hour: u8, minutes: u8) -> DTime {
     DTime::new(hour, minutes, 0).unwrap()

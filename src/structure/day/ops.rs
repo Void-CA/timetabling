@@ -1,8 +1,9 @@
 use std::fmt;
 use std::ops;
 
+use crate::structure::timesegment::TimeSegment;
+
 use super::model::{DayStructure, StructureError};
-use super::timesegment::TimeSegment;
 
 impl ops::Index<usize> for DayStructure {
     type Output = TimeSegment;

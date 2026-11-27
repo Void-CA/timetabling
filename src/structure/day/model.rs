@@ -1,4 +1,4 @@
-use super::timesegment::TimeSegment;
+use crate::structure::timesegment::TimeSegment;
 use crate::time::{DTime, DTimeSpan};
 
 #[derive(Debug, Clone, PartialEq, Eq)]

@@ -1,6 +1,7 @@
 use crate::time::{DTime, DTimeSpan};
 
-use super::timesegment::{SegmentKind, TimeSegment};
+use crate::structure::timesegment::{SegmentKind, TimeSegment};
+
 use super::{DayStructure, StructureError};
 
 fn at(hour: u8, minutes: u8) -> DTime {

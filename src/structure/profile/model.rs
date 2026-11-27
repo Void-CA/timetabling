@@ -1,93 +1,14 @@
-use crate::structure::{DayStructure, SegmentKind};
+use crate::structure::day::DayStructure;
+use crate::structure::interruption::{Interruption, InterruptionSpan, InterruptionSpanKind};
+use crate::structure::run::Run;
+use crate::structure::timesegment::SegmentKind;
 use crate::time::{DTime, DTimeSpan};
-
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub struct Run {
-    start: DTime,
-    end: DTime,
-    duration: DTimeSpan,
-}
-
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub enum InterruptionSpanKind {
-    Break,
-    EatingBreak,
-    Unassigned,
-    Hole,
-}
-
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub struct InterruptionSpan {
-    kind: InterruptionSpanKind,
-    duration: DTimeSpan,
-}
-
-#[derive(Debug, Clone, PartialEq, Eq)]
-pub struct Interruption {
-    spans: Vec<InterruptionSpan>,
-}
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct DayProfile {
     runs: Vec<Run>,
     interruptions: Vec<Interruption>,
     academic_starts: Vec<DTime>,
-}
-
-impl Run {
-    fn new(start: DTime, end: DTime) -> Self {
-        Self {
-            start,
-            end,
-            duration: end - start,
-        }
-    }
-
-    pub fn start(&self) -> DTime {
-        self.start
-    }
-
-    pub fn end(&self) -> DTime {
-        self.end
-    }
-
-    pub fn duration(&self) -> DTimeSpan {
-        self.duration
-    }
-
-    fn contains(&self, time: DTime) -> bool {
-        (time - self.start) < self.duration
-    }
-}
-
-impl InterruptionSpan {
-    fn new(kind: InterruptionSpanKind, duration: DTimeSpan) -> Self {
-        Self { kind, duration }
-    }
-
-    pub fn kind(&self) -> InterruptionSpanKind {
-        self.kind
-    }
-
-    pub fn duration(&self) -> DTimeSpan {
-        self.duration
-    }
-}
-
-impl Interruption {
-    fn new(spans: Vec<InterruptionSpan>) -> Self {
-        debug_assert!(!spans.is_empty());
-
-        Self { spans }
-    }
-
-    pub fn spans(&self) -> &[InterruptionSpan] {
-        &self.spans
-    }
-
-    pub fn duration(&self) -> DTimeSpan {
-        self.spans.iter().map(InterruptionSpan::duration).sum()
-    }
 }
 
 impl DayProfile {

@@ -1,4 +1,4 @@
-use crate::structure::profile::Interruption;
+use crate::structure::interruption::Interruption;
 use crate::time::{DTime, DTimeSpan};
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
