@@ -1,5 +1,4 @@
-use crate::structure::{Pause, PauseKind, ScheduleTemplate};
-use crate::time::{DTime, DTimeSpan};
+use crate::prelude::*;
 
 pub fn at(hour: u8, minutes: u8) -> DTime {
     DTime::new(hour, minutes, 0).expect("hora válida")

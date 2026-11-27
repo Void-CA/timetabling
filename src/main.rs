@@ -1,16 +1,12 @@
 pub mod activity;
+pub mod helpers;
 pub mod placement;
+pub mod prelude;
 pub mod structure;
 pub mod time;
-pub mod helpers;
 
-use activity::{Activity, ActivityType, InterruptionPolicy};
-use placement::{Placement, StartPolicy};
-use structure::profile::DayProfile;
-
-use crate::{helpers::ulsa, time::DTimeSpan};
-
-
+use crate::helpers::ulsa;
+use crate::prelude::*;
 
 fn report(activity: &Activity, profile: &DayProfile) {
     println!();
